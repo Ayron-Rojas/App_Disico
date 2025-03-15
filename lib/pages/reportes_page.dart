@@ -1,3 +1,4 @@
+import 'package:app_disico/widgets/side_menu.dart';
 import 'package:flutter/material.dart';
 
 class ReportesPage extends StatelessWidget {
@@ -7,8 +8,19 @@ class ReportesPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Reportes'),
       ),
-      body: Center(
-        child: Text('Pantalla de Reportes y Consultas'),
+      body: Row(
+        children: [
+          SideMenu(),
+          Expanded(
+              child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ListView(
+              children: [
+                const Text('Pantalla de reportes'),
+              ],
+            ),
+          )),
+        ],
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:app_disico/routes/app_router.dart';
 import 'package:flutter/material.dart';
 import 'pages/home_page.dart';
 import 'pages/registro_epp_page.dart';
@@ -11,19 +12,13 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Gestión EPP',
+      // Configuracion de rutas
+      routerConfig: AppRouter.router,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // Define la ruta inicial y las rutas nombradas
-      initialRoute: '/',
-      routes: {
-        '/': (context) => HomePage(),
-        '/registro': (context) => RegistroEPPPage(),
-        '/movimientos': (context) => MovimientosPage(),
-        '/reportes': (context) => ReportesPage(),
-      },
     );
   }
 }
