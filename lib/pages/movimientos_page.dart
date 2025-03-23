@@ -2,6 +2,8 @@ import 'package:app_disico/widgets/side_menu.dart';
 import 'package:flutter/material.dart';
 
 class MovimientosPage extends StatelessWidget {
+  const MovimientosPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
