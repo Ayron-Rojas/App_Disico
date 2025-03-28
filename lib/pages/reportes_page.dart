@@ -1,3 +1,4 @@
+import 'package:app_disico/widgets/main_layout.dart';
 import 'package:app_disico/widgets/side_menu.dart';
 import 'package:flutter/material.dart';
 
@@ -6,24 +7,14 @@ class ReportesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Reportes'),
-      ),
-      body: Row(
+    return MainLayout(
+        child: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ListView(
         children: [
-          SideMenu(),
-          Expanded(
-              child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ListView(
-              children: [
-                const Text('Pantalla de reportes'),
-              ],
-            ),
-          )),
+          const Text('Pantalla de reportes'),
         ],
       ),
-    );
+    ));
   }
 }

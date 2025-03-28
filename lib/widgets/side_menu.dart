@@ -1,62 +1,63 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class SideMenu extends StatefulWidget {
-  const SideMenu({super.key});
+class SideMenu extends StatelessWidget {
+  final bool isExpanded;
+  final VoidCallback onToggle;
 
-  @override
-  _SideMenuState createState() => _SideMenuState();
-}
-
-class _SideMenuState extends State<SideMenu> {
-  bool _isExpanded = true;
-
-  void _toggleMenu() {
-    setState(() {
-      _isExpanded = !_isExpanded;
-    });
-  }
+  const SideMenu({
+    super.key,
+    required this.isExpanded,
+    required this.onToggle,
+  });
 
   @override
   Widget build(BuildContext context) {
     final String currentRoute = GoRouterState.of(context).uri.toString();
 
-    return Align( // ✅ Asegura que el menú tenga un ancho definido
+    return Align(
       alignment: Alignment.centerLeft,
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
-        width: _isExpanded ? 250 : 60,
+        duration: const Duration(milliseconds: 300),
+        width: isExpanded ? 250 : 60,
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
           color: Colors.blueGrey[900],
           boxShadow: [
-            BoxShadow(color: Colors.black26, blurRadius: 5.0, spreadRadius: 2.0),
+            BoxShadow(
+                color: Colors.black26, blurRadius: 5.0, spreadRadius: 2.0),
           ],
         ),
         child: Column(
           children: [
+            // Logo (se usa como botón para expandir/contraer)
             GestureDetector(
-              onTap: _toggleMenu,
+              onTap:
+                  onToggle, // Ahora usa la función externa para alternar el menú
               child: Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 alignment: Alignment.center,
                 child: Image.asset(
                   'assets/images/logoDisico.png',
-                  width: _isExpanded ? 200 : 40,
-                  height: _isExpanded ? 120 : 40,
+                  width: isExpanded ? 200 : 40,
+                  height: isExpanded ? 120 : 40,
                   fit: BoxFit.contain,
                 ),
               ),
             ),
-            Divider(color: Colors.white30),
+            const Divider(color: Colors.white30),
             Expanded(
               child: Column(
                 children: [
-                  _buildMenuItem(context, Icons.dashboard, "Inicio", "/", currentRoute),
-                  _buildMenuItem(context, Icons.home, "Registro", "/registro", currentRoute),
-                  _buildMenuItem(context, Icons.swap_horiz, "Movimientos", "/movimientos", currentRoute),
-                  _buildMenuItem(context, Icons.bar_chart, "Reportes", "/reportes", currentRoute),
+                  _buildMenuItem(
+                      context, Icons.dashboard, "Inicio", "/", currentRoute),
+                  _buildMenuItem(context, Icons.home, "Registro", "/registro",
+                      currentRoute),
+                  _buildMenuItem(context, Icons.swap_horiz, "Movimientos",
+                      "/movimientos", currentRoute),
+                  _buildMenuItem(context, Icons.bar_chart, "Reportes",
+                      "/reportes", currentRoute),
                 ],
               ),
             ),
@@ -66,39 +67,45 @@ class _SideMenuState extends State<SideMenu> {
     );
   }
 
-  Widget _buildMenuItem(BuildContext context, IconData icon, String label, String route, String currentRoute) {
-    final bool isActive = currentRoute == route;
+  Widget _buildMenuItem(BuildContext context, IconData icon, String label,
+    String route, String currentRoute) {
+  final bool isActive = currentRoute == route;
 
-    return Tooltip(
-      message: _isExpanded ? "" : label,
-      child: InkWell(
-        onTap: () => context.go(route),
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-          decoration: BoxDecoration(
-            color: isActive ? Colors.blueGrey[700] : Colors.transparent,
-            border: isActive
-                ? Border(left: BorderSide(color: Colors.white, width: 4))
-                : null,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min, // 🔹 Ajuste para evitar overflow
-            children: [
-              Icon(icon, color: Colors.white, size: 30),
-              if (_isExpanded) ...[
-                SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    label,
-                    style: TextStyle(color: Colors.white),
-                    overflow: TextOverflow.ellipsis,
-                  ),
+  return Tooltip(
+    message: isExpanded ? "" : label,
+    child: InkWell(
+      onTap: () => context.go(route),
+      child: Container(
+        width: isExpanded ? 250 : 60, // Fijamos el ancho del contenedor
+        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+        decoration: BoxDecoration(
+          color: isActive ? Colors.blueGrey[700] : Colors.transparent,
+          border: isActive
+              ? const Border(left: BorderSide(color: Colors.white, width: 4))
+              : null,
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: Colors.white,
+              size: 24,
+            ),
+            if (isExpanded) ...[
+              const SizedBox(width: 10), // Espacio entre icono y texto
+              Expanded( // Asegura que el texto nunca se salga del ancho disponible
+                child: Text(
+                  label,
+                  style: const TextStyle(color: Colors.white),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
-              ],
+              ),
             ],
-          ),
+          ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
