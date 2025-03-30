@@ -8,12 +8,12 @@ class DatabaseHelper {
   DatabaseHelper._init();
 
   Future<Database> get database async {
-    if (_database != null) return database;
+    if (_database != null) return _database!;
     _database = await _initDB('epp.db');
     return _database!;
   }
 
-  Future<Database> _initDB(String filepath) async{
+  Future<Database> _initDB(String filepath) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filepath);
     return await openDatabase(path, version: 1, onCreate: _createDB);

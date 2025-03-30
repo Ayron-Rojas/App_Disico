@@ -1,9 +1,9 @@
 import 'package:go_router/go_router.dart';
 
-import '/pages/home_page.dart';
-import '/pages/registro_epp_page.dart';
-import '/pages/movimientos_page.dart';
-import '/pages/reportes_page.dart';
+import '../pages/dashBoard/home_page.dart';
+import '../pages/registros/registro_epp_page.dart';
+import '../pages/movimientos/movimientos_page.dart';
+import '../pages/reportes/reportes_page.dart';
 
 class AppRouter {
   // Definir instancia de rutas a usar en toda la app

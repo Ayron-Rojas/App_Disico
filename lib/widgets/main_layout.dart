@@ -20,26 +20,30 @@ class _MainLayoutState extends State<MainLayout> {
   }
 
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      title: const Text('Gestión EPP'),
-    ),
-    body: Row(
-      children: [
-        SizedBox(
-          width: isExpanded ? 250 : 60, // Se asegura de que el menú tenga ancho fijo
-          child: SideMenu(
-            isExpanded: isExpanded,
-            onToggle: toggleMenu,
-          ),
-        ),
-        Expanded(
-          child: widget.child,
-        ),
-      ],
-    ),
-  );
-}
-
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: null,
+        body: Stack(
+          children: [
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                if (isExpanded) {
+                  setState(() {
+                    isExpanded = false;
+                  });
+                }
+              },
+              child: Padding(
+                padding: EdgeInsets.only(left: isExpanded ? 250 : 60),
+                child: widget.child,
+              ),
+            ),
+            SizedBox(
+              width: isExpanded ? 250 : 60,
+              child: SideMenu(isExpanded: isExpanded, onToggle: toggleMenu),
+            )
+          ],
+        ));
+  }
 }
