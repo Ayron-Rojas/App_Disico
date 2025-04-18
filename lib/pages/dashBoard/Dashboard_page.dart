@@ -10,8 +10,8 @@ class DashboardPage extends StatelessWidget {
     final availableHeight = screenHeight - kToolbarHeight - 32; // ajustamos por AppBar + padding
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: ListView(
         children: [
           SizedBox(
             height: availableHeight / 3,
