@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ResumenTable extends StatelessWidget {
   final String title;
@@ -16,6 +17,9 @@ class ResumenTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ✅ ScrollController creado aquí
+    final ScrollController scrollController = ScrollController();
+
     return Container(
       width: double.infinity,
       child: Card(
@@ -33,52 +37,63 @@ class ResumenTable extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              // ✅ Scroll limitado a una altura específica
+
+              // ✅ Altura limitada y Scrollbar conectada con controlador
               SizedBox(
-                height: 100, // Este valor puede ajustarse para mostrar solo 3 filas
+                height: 120,
                 child: Scrollbar(
+                  controller: scrollController,
                   thumbVisibility: true,
                   child: SingleChildScrollView(
+                    controller: scrollController,
                     scrollDirection: Axis.vertical,
-                    child: DataTable(
-                      columnSpacing: 16,
-                      headingRowColor: MaterialStateProperty.all(Colors.grey[200]),
-                      columns: headers
-                          .map(
-                            (header) => DataColumn(
-                              label: Center(
-                                child: Text(
-                                  header,
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                      rows: data
-                          .map(
-                            (row) => DataRow(
-                              cells: row
-                                  .map(
-                                    (cell) => DataCell(
-                                      Center(
-                                        child: Text(cell),
-                                      ),
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                            maxWidth:
+                                600), // ajusta si quieres más angosto o más ancho
+                        child: DataTable(
+                          columnSpacing: 16,
+                          headingRowColor:
+                              WidgetStateProperty.all(Colors.grey[200]),
+                          columns: headers
+                              .map(
+                                (header) => DataColumn(
+                                  label: Center(
+                                    child: Text(
+                                      header,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                  )
-                                  .toList(),
-                            ),
-                          )
-                          .toList(),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                          rows: data
+                              .map(
+                                (row) => DataRow(
+                                  cells: row
+                                      .map(
+                                        (cell) => DataCell(
+                                          Center(child: Text(cell)),
+                                        ),
+                                      )
+                                      .toList(),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
+
               const SizedBox(height: 8),
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () => Navigator.pushNamed(context, route),
+                  onPressed: () => context.push(route),
                   child: const Text("Ver más"),
                 ),
               ),
