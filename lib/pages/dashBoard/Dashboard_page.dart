@@ -14,7 +14,6 @@ class DashboardPage extends StatelessWidget {
       child: ListView(
         children: [
           SizedBox(
-            height: availableHeight / 3,
             child: ResumenTable(
               title: "Resumen Registro",
               headers: ["Codigo", "Descripcion", "Marca", "Fecha", "Tipo"],
@@ -28,7 +27,6 @@ class DashboardPage extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           SizedBox(
-            height: availableHeight / 3,
             child: ResumenTable(
               title: "Resumen Movimientos",
               headers: ["Codigo", "Descripcion", "Marca", "Fecha", "Tipo"],
@@ -41,7 +39,6 @@ class DashboardPage extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           SizedBox(
-            height: availableHeight / 3,
             child: ResumenTable(
               title: "Resumen Reportes",
               headers: ["Codigo", "Descripcion", "Marca", "Fecha", "Tipo"],

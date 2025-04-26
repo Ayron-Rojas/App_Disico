@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:data_table_2/data_table_2.dart';
 import 'package:go_router/go_router.dart';
 
 class ResumenTable extends StatelessWidget {
@@ -16,10 +17,7 @@ class ResumenTable extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    // ✅ ScrollController creado aquí
-    final ScrollController scrollController = ScrollController();
-
+  Widget build(BuildContext contex) {
     return Container(
       width: double.infinity,
       child: Card(
@@ -27,7 +25,6 @@ class ResumenTable extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 title,
@@ -36,52 +33,44 @@ class ResumenTable extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 12),
 
-              // ✅ Altura limitada y Scrollbar conectada con controlador
-              SizedBox(
-                height: 120,
+              /// Sección con tabla de altura fija y scroll interno
+              Container(
+                height: 150,
                 child: Scrollbar(
                   controller: scrollController,
                   thumbVisibility: true,
                   child: SingleChildScrollView(
                     controller: scrollController,
                     scrollDirection: Axis.vertical,
-                    child: Center(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
                       child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                            maxWidth:
-                                600), // ajusta si quieres más angosto o más ancho
-                        child: DataTable(
-                          columnSpacing: 16,
+                        constraints: const BoxConstraints(minWidth: 600),
+                        child: DataTable2(
+                          columnSpacing: 12,
+                          horizontalMargin: 12,
                           headingRowColor:
                               WidgetStateProperty.all(Colors.grey[200]),
-                          columns: headers
-                              .map(
-                                (header) => DataColumn(
-                                  label: Center(
-                                    child: Text(
-                                      header,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                          rows: data
-                              .map(
-                                (row) => DataRow(
-                                  cells: row
-                                      .map(
-                                        (cell) => DataCell(
-                                          Center(child: Text(cell)),
-                                        ),
-                                      )
-                                      .toList(),
-                                ),
-                              )
-                              .toList(),
+                          headingTextStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                          columns: headers.map((header) {
+                            return DataColumn(
+                              label: Text(header), // ← sin Center aquí
+                            );
+                          }).toList(),
+                          rows: data.map((row) {
+                            return DataRow(
+                              cells: row.map((cell) {
+                                return DataCell(
+                                  Text(cell), // ← también sin Center aquí
+                                );
+                              }).toList(),
+                            );
+                          }).toList(),
                         ),
                       ),
                     ),
@@ -93,10 +82,10 @@ class ResumenTable extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () => context.push(route),
+                  onPressed: () => contex.push(route),
                   child: const Text("Ver más"),
                 ),
-              ),
+              )
             ],
           ),
         ),
