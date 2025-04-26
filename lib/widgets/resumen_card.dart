@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:data_table_2/data_table_2.dart';
+import 'package:go_router/go_router.dart';
 
 class ResumenTable extends StatelessWidget {
   final String title;
@@ -15,7 +17,7 @@ class ResumenTable extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext contex) {
     return Container(
       width: double.infinity,
       child: Card(
@@ -23,7 +25,6 @@ class ResumenTable extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 title,
@@ -32,56 +33,57 @@ class ResumenTable extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 8),
-              // ✅ Scroll limitado a una altura específica
-              SizedBox(
-                height: 100, // Este valor puede ajustarse para mostrar solo 3 filas
+              const SizedBox(height: 12),
+
+              /// Sección con tabla de altura fija y scroll interno
+              Container(
+                height: 150,
                 child: Scrollbar(
                   thumbVisibility: true,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
-                    child: DataTable(
-                      columnSpacing: 16,
-                      headingRowColor: MaterialStateProperty.all(Colors.grey[200]),
-                      columns: headers
-                          .map(
-                            (header) => DataColumn(
-                              label: Center(
-                                child: Text(
-                                  header,
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                      rows: data
-                          .map(
-                            (row) => DataRow(
-                              cells: row
-                                  .map(
-                                    (cell) => DataCell(
-                                      Center(
-                                        child: Text(cell),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                            ),
-                          )
-                          .toList(),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(minWidth: 600),
+                        child: DataTable2(
+                          columnSpacing: 12,
+                          horizontalMargin: 12,
+                          headingRowColor:
+                              WidgetStateProperty.all(Colors.grey[200]),
+                          headingTextStyle: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                          columns: headers.map((header) {
+                            return DataColumn(
+                              label: Text(header), // ← sin Center aquí
+                            );
+                          }).toList(),
+                          rows: data.map((row) {
+                            return DataRow(
+                              cells: row.map((cell) {
+                                return DataCell(
+                                  Text(cell), // ← también sin Center aquí
+                                );
+                              }).toList(),
+                            );
+                          }).toList(),
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
+
               const SizedBox(height: 8),
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () => Navigator.pushNamed(context, route),
+                  onPressed: () => contex.push(route),
                   child: const Text("Ver más"),
                 ),
-              ),
+              )
             ],
           ),
         ),
